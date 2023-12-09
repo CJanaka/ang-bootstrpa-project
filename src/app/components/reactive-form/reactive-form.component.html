@@ -1,0 +1,56 @@
+<div class="container">
+    <div class="mt-5">
+        <h2>Registration Form</h2>
+    </div>
+    <form #f="ngForm" novalidate (ngSubmit)="onSubmit">
+        <fieldset ngModelGroup>
+            <div class="col-6">
+                <div class="form-group">
+                    <label for="">First Name</label>
+                    <input type="text" name="firstName" #firstName = "ngModel" class="form-control" 
+                    [ngClass]="{'is-invalid':firstName.invalid && (firstName.touched || firstName.dirty),
+                    'is-valid':firstName.valid && (firstName.touched || firstName.dirty)}" 
+                    [(ngModel)]="studentModel.firstName" placeholder="Enter First Name">
+                    <div class="invalid-feedback">Please enter first name</div>
+                </div>
+            </div>
+            <div class="col-6">
+                <div class="form-group">
+                    <label for="">Last Name</label>
+                    <input type="text" name="lastName" id="" class="form-control" placeholder="Enter Last Name"
+                        [(ngModel)]="studentModel.lastName">
+                </div>
+            </div>
+        </fieldset>
+        <div class="col-6">
+            <div class="form-group">
+                <label for="">Email</label>
+                <input type="email" name="email" #email = "ngModel" id="" class="form-control" placeholder="Enter Email" autocomplete="off"
+                    [ngClass]="{'is-invalid':email.invalid && (email.touched || email.dirty),
+                                'is-valid':email.valid && (email.touched || email.dirty)}" 
+                    [(ngModel)]="studentModel.email"
+                    required pattern="[^@\s]+@[^@\s]+\.[^@\s]+">
+            </div>
+        </div>
+        <div class="col-6">
+            <div class="form-group">
+                <label for="">Password</label>
+                <input type="password" name="password" #password="ngModel" id="" class="form-control"
+                    placeholder="Enter Password" [ngClass]="{'is-invalid':password.invalid && (password.touched || password.dirty),
+                                'is-valid':password.valid && (password.touched || password.dirty)}"
+                    [(ngModel)]="studentModel.password" required minlength="8">
+            </div>
+        </div>
+        <div class="col-6">
+            <div class="form-group">
+                <label for="">Language</label>
+                <select name="language" id="" class="form-control" [(ngModel)]="studentModel.language">
+                    <option value="" disabled selected>select language</option>
+                    <option *ngFor="let lang of languages" [value]="lang">{{lang}}</option>
+                </select>
+            </div>
+        </div>
+        <button type="submit" class="btn btn-primary" >Submit</button>
+    </form>
+    <p>{{f.value | json}}</p>
+</div>

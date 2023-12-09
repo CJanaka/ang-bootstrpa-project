@@ -1,0 +1,230 @@
+<div class="container">
+    <form [formGroup]="invoiceForm" (ngSubmit)="onSubmit()">
+        <div class="row">
+            <div class="col-md-12">
+                <h2>Invoice</h2>
+            </div>
+
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-body">
+
+                        <div class="row">
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label>Invoice No</label>
+                                    <input type="text" class="form-control" formControlName="invoiceNo"
+                                        placeholder="Enter Invoice No"
+                                        [ngClass]="{'is-invalid': submited && f['invoiceNo'].errors}">
+                                    <div *ngIf="f['invoiceNo'].errors" class="invalid-feedback">
+                                        <div *ngIf="f['invoiceNo'].errors['required']">Invoice No Required</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label>Invoice Date</label>
+                                    <input type="date" class="form-control" formControlName="invoiceDate"
+                                        placeholder="Enter Invoice Date"
+                                        [ngClass]="{'is-invalid': submited && f['invoiceDate'].errors}">
+                                        <div *ngIf="f['invoiceDate'].errors" class="invalid-feedback">
+                                            <div *ngIf="f['invoiceDate'].errors['required']">Invoice Date Required</div>
+                                        </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label>Customer Name</label>
+                                    <input type="text" class="form-control" formControlName="customerName"
+                                        placeholder="Enter Customer Name"
+                                        [ngClass]="{'is-invalid': submited && f['customerName'].errors}">
+                                        <div *ngIf="f['customerName'].errors" class="invalid-feedback">
+                                            <div *ngIf="f['customerName'].errors['required']">Customer Name Required</div>
+                                        </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label>Contact No</label>
+                                    <input type="text" class="form-control" formControlName="contactNO"
+                                        placeholder="Enter Contact No"
+                                        [ngClass]="{'is-invalid': submited && f['contactNO'].errors}">
+                                        <div *ngIf="f['contactNO'].errors" class="invalid-feedback">
+                                            <div *ngIf="f['contactNO'].errors['required']">Contact No Required</div>
+                                        </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Address</label>
+                                    <input type="text" class="form-control" formControlName="address"
+                                        placeholder="Enter Address">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label>Remarks</label>
+                                    <input type="text" class="form-control" formControlName="remarks"
+                                        placeholder="Enter Remarks">
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-12">
+                <div class="card mt-2">
+                    <div class="card-body">
+
+                        <div class="row">
+                            <button type="button" class="btn btn-secondary ml-3" (click)="addNewLine()"> Add
+                                New</button>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-3">
+                                <label>Item Name</label>
+                            </div>
+                            <div class="col-md-3">
+                                <label>Unit Price</label>
+                            </div>
+                            <div class="col-md-2">
+                                <label>Quantity</label>
+                            </div>
+                            <div class="col-md-3">
+                                <label>Total</label>
+                            </div>
+                            <div class="col-md-1">
+                            </div>
+                        </div>
+                        <div formGroupName="lineItems">
+                            <div class="row mt-2" *ngFor="let line of lineItems.controls; let i = index"
+                                [formGroupName]="i">
+                                <div class="col-md-3">
+                                    <input type="text" class="form-control" formControlName="itemName"
+                                        placeholder="Enter Item Name"
+                                        [ngClass]="{'is-invalid': submited && line.get('itemName')?.errors}">
+                                        <div *ngIf="f['contactNO'].errors" class="invalid-feedback">
+                                            <div *ngIf="line.get('itemName')?.errors?.['required']">Item Name Required</div>
+                                        </div>
+                                </div>
+                                <div class="col-md-3">
+
+                                    <input type="number" class="form-control text-right" formControlName="unitPrice"
+                                        placeholder="Enter Unit Price" (keyup)="onUnitPriceQuantitiyChanged(i)"
+                                        [ngClass]="{'is-invalid': submited && line.get('unitPrice')?.errors}">
+                                        <div *ngIf="f['contactNO'].errors" class="invalid-feedback">
+                                            <div *ngIf="line.get('unitPrice')?.errors?.['required']">Unit Price Required</div>
+                                            <div *ngIf="line.get('unitPrice')?.errors?.['min']">Unit Price should be positive</div>
+                                        </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <input type="number" class="form-control text-right" formControlName="quantity"
+                                        placeholder="Enter Quantity" (keyup)="onUnitPriceQuantitiyChanged(i)"
+                                        [ngClass]="{'is-invalid': submited && line.get('quantity')?.errors}">
+                                        <div *ngIf="line.get('quantity')?.errors" class="invalid-feedback">
+                                            <div *ngIf="line.get('quantity')?.errors?.['required']">Quantity Required</div>
+                                            <div *ngIf="line.get('quantity')?.errors?.['min']">Quantity should be positive</div>
+                                        </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <input type="number" class="form-control text-right" readonly
+                                        formControlName="total" placeholder="Enter Total"
+                                        [ngClass]="{'is-invalid': submited && line.get('total')?.errors}">
+                                        <div *ngIf="line.get('total')?.errors" class="invalid-feedback">
+                                            <div *ngIf="line.get('total')?.errors?.['required']">Total Required</div>
+                                        </div>
+                                </div>
+                                <div class="col-md-1">
+                                    <button type="button" class="btn btn-danger" (click)="deleteLine(i)">X</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-12">
+                <div class="card mt-2">
+                    <div class="card-body">
+
+                        <div class="row">
+                            <div class="col-md-2 offset-md-7">
+                                <div class="form-group">
+                                    <label>Gross Amount</label>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <input type="number" readonly class="form-control text-right"
+                                        placeholder="Enter Gross AMount" formControlName="grossAmount"
+                                        [ngClass]="{'is-invalid': submited && f['grossAmount'].errors}">
+                                        <div *ngIf="f['grossAmount'].errors" class="invalid-feedback">
+                                            <div *ngIf="f['grossAmount'].errors['required']">Gross Amount Required</div>
+                                        </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-2 offset-md-7">
+                                <div class="form-group">
+                                    <label>Discount</label>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <input type="number" class="form-control text-right" formControlName="discount"
+                                        placeholder="Enter Discount" (keyup)="calculateNetAmunt()"
+                                        [ngClass]="{'is-invalid': submited && f['discount'].errors}">
+                                        <div *ngIf="f['discount'].errors" class="invalid-feedback">
+                                            <div *ngIf="f['discount'].errors['required']">Discount Required</div>
+                                            <div *ngIf="f['discount'].errors['min']">Discount should be more than '0'</div>
+                                            <div *ngIf="f['discount'].errors['max']">Discount should be more than '100'</div>
+                                        </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-2 offset-md-7">
+                                <div class="form-group">
+                                    <label>Net Amount</label>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <input type="number" readonly class="form-control text-right"
+                                        formControlName="netAmount" placeholder="Enter Net Amount">
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-12">
+                <div class="card mt-2">
+                    <div class="card-body">
+
+                        <div class="float-end">
+                            <button type="submit" class="btn btn-primary" (click)="onSubmit()">Save </button>
+                            <button type="reset" class="btn btn-warning ml-3">Clear </button>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </form>
+</div>
